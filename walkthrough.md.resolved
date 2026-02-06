@@ -1,0 +1,22 @@
+# Cricbuzz Data Extraction Fix
+
+I have updated the script [extractdata.py](file:///k:/antigravity/extractdata.py) to correctly extract international team data from the Cricbuzz API and save it to a CSV file.
+
+## Changes
+- **Dynamic Field Extraction**: The script now automatically detects all available fields (columns) from the API response instead of using a hardcoded list.
+- **Timestamped Filenames**: To avoid permission errors and overwrite issues, the output CSV file now includes a timestamp (e.g., `international_match_20260206_124529.csv`).
+- **Data Filtering**: The script continues to correct parse the `list` key and filters for valid team entries.
+
+## Verification Results
+
+### Automated Verification
+I ran the script `python extractdata.py` and it successfully created a timestamped CSV file, for example: `international_match_20260206_124529.csv`.
+
+### Manual Verification
+The CSV file now contains all fields returned by the API, such as:
+- `teamId`
+- `teamName`
+- `teamSName`
+- `imageId`
+- `countryName`
+- And any others present in the data.

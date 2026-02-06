@@ -1,0 +1,22 @@
+# Fix Cricbuzz Data Extraction
+
+The current script fails to write data because it looks for the key `rank` in the API response, but the data is actually located in the `list` key.
+
+## Proposed Changes
+
+### k:\antigravity\extractdata.py
+
+#### [MODIFY] [extractdata.py](file:///k:/antigravity/extractdata.py)
+- Change `response.json().get('rank', [])` to `response.json().get('list', [])`.
+- Add a check `if 'teamId' in entry` to ensure we only process valid team entries and skip category headers like "Test Teams".
+- Ensure `requests` is imported (already installed).
+
+## Verification Plan
+
+### Automated Tests
+- Run `python extractdata.py`.
+- Check if `international_match.csv` is created.
+- Verify the CSV contains data (e.g., check file size or content).
+
+### Manual Verification
+- I will run the script and read the generated CSV file content to show the user.
