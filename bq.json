@@ -1,0 +1,24 @@
+
+{
+    "BigQuery Schema": [{
+      "name": "teamName",
+      "type": "STRING"
+     },
+     {
+      "name": "teamId",
+      "type": "eamId"
+     },
+          {
+      "name": "imageId",
+      "type": "eamId"
+     },
+     {
+      "name": "teamSName",
+      "type": "STRING"
+     },
+          {
+      "name": "countryName",
+      "type": "STRING"
+     }
+    ]
+   }
