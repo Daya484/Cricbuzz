@@ -7,9 +7,9 @@ select
   coalesce(countryName, teamName, '-1') as country_name,
   cast(imageid as numeric) as image_id,
   file_name,
-  update_timestamp
+  max(update_timestamp) as update_timestamp
   from {{ ref('bronze_team_ingest') }}
-  qualify row_number() over (partition by file_name order by update_timestamp desc) = 1 
+  group by 1,2,3,4,5
 ),
 silver as (
   select *
