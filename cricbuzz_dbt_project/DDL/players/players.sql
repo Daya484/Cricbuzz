@@ -1,13 +1,12 @@
 create or replace external table  `project-75b24ad0-af2b-4b2b-863.dayasagar.team_ext`
 (
-  imageId            STRING  
-  ,countryName       STRING  
-  ,teamName          STRING  
-  ,teamSName         STRING  
-  ,teamId            STRING  
+  teamId           STRING  
+  ,imageId         STRING  
+  ,countryName     STRING  
+  ,teamSName       STRING  
+  ,teamName        STRING  
  
 )
-
 
 OPTIONS ( 
     format = 'CSV',

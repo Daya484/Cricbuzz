@@ -6,4 +6,6 @@ sources:
     schema: dayasagar
     tables:
       - name: team_ext
-        description: This table is to get team data  
+        description: This table is to get team data 
+      - name: silver_team_distinct_ingest 
+        description: This table is to get team data
