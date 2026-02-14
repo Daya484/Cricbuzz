@@ -21,7 +21,7 @@ response = requests.get(url, headers=headers, params=params)
 if response.status_code == 200:
     data = response.json().get('list', [])  # Extracting the 'list' data
     import datetime
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d")
     csv_filename = f'international_match_{timestamp}.csv'
 
     if data:

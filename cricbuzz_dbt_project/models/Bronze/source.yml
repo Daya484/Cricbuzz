@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: src_team_ext
+    database: project-75b24ad0-af2b-4b2b-863
+    schema: dayasagar
+    tables:
+      - name: team_ext
+        description: This table is to get team data 
+      - name: silver_team_distinct_ingest 
+        description: This table is to get team data
