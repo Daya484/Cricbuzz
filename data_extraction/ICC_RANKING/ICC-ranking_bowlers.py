@@ -53,9 +53,9 @@ if response.status_code == 200:
         writer = csv.DictWriter(csv_buffer, fieldnames=field_names)
         writer.writeheader()
         writer.writerows(all_rankings)
-        
+         
         # Upload directly to GCS without saving locally
-        bucket_name = 'icc-rank_bolwer'
+        bucket_name = 'icc_rank_bolwer'
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)
         destination_blob_name = f'{csv_filename}'  # The path to store in GCS
@@ -63,8 +63,8 @@ if response.status_code == 200:
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
 
-        print(f"Successfully extracted {len(all_rankings)} bowlers rankings and uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
-        print(f"No local file created - data uploaded directly to cloud storage.")
+        # print(f"Successfully extracted {len(all_rankings)} bowlers rankings and uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
+        # print(f"No local file created - data uploaded directly to cloud storage.")
     else:
         print("No ranking data found in the response")
 else:

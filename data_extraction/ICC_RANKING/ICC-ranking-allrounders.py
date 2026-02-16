@@ -63,8 +63,8 @@ if response.status_code == 200:
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
 
-        print(f"Successfully extracted {len(all_rankings)} allrounders rankings and uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
-        print(f"No local file created - data uploaded directly to cloud storage.")
+        # print(f"Successfully extracted {len(all_rankings)} allrounders rankings and uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
+        # print(f"No local file created - data uploaded directly to cloud storage.")
     else:
         print("No ranking data found in the response")
 else:
