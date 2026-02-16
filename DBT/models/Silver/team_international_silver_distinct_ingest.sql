@@ -5,4 +5,4 @@
     )
 }}
 
-select * from {{ ref('stg_silver_team') }}
+select * from {{ ref('stg_silver_team_international') }}

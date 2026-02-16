@@ -3,7 +3,7 @@
 DELETE FROM {{this}} ingest
 WHERE EXISTS (
   SELECT 1
-  FROM {{ ref('bronze_team_ingest') }} ext
+  FROM {{ ref('team_international_bronze_ingest') }} ext
   where ext.file_name=ingest.file_name
   and ingest.update_timestamp<ext.update_timestamp
 )

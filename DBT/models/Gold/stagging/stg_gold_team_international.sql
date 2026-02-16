@@ -14,7 +14,7 @@ country_name,
 image_id,
 file_name,	
 update_timestamp
-from {{ ref('silver_team_distinct_ingest') }}
+from {{ ref('team_international_silver_distinct_ingest') }}
 )
 
 select 
