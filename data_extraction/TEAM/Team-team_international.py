@@ -1,6 +1,9 @@
 import requests
 import csv
 from google.cloud import storage
+import datetime
+from io import StringIO
+
 url = "https://cricbuzz-cricket2.p.rapidapi.com/teams/v1/international"
 
 headers = {
@@ -20,9 +23,8 @@ response = requests.get(url, headers=headers, params=params)
 
 if response.status_code == 200:
     data = response.json().get('list', [])  # Extracting the 'list' data
-    import datetime
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    csv_filename = f'international_match_{timestamp}.csv'
+    timestamp = datetime.datetime.now().strftime("%Y%m%d")
+    csv_filename = f'team_international_{timestamp}.csv'
 
     if data:
         #field_names = ['teamId', 'countryName', 'teamSName', 'imageId', 'teamName']  # Specify requ
@@ -34,25 +36,25 @@ if response.status_code == 200:
         
         field_names = list(field_names) # Convert to list for DictWriter
 
-        # Write data to CSV file with only specified field names
-        with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=field_names)
-            writer.writeheader()
-            for entry in data:
-                if isinstance(entry, dict) and 'teamId' in entry: # Keep the filter for valid teams if desired, or just all dicts
-                     writer.writerow({field: entry.get(field) for field in field_names})
+        # Create CSV in memory using StringIO
+        csv_buffer = StringIO()
+        writer = csv.DictWriter(csv_buffer, fieldnames=field_names)
+        writer.writeheader()
+        for entry in data:
+            if isinstance(entry, dict) and 'teamId' in entry: # Keep the filter for valid teams if desired, or just all dicts
+                 writer.writerow({field: entry.get(field) for field in field_names})
 
-        print(f"Data fetched successfully and written to '{csv_filename}'")
-        # Upload the CSV file to GCS
+        # Upload directly to GCS without saving locally
         bucket_name = 'testing-daya'
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)
         destination_blob_name = f'{csv_filename}'  # The path to store in GCS
 
         blob = bucket.blob(destination_blob_name)
-        blob.upload_from_filename(csv_filename)
+        blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
 
-        print(f"File {csv_filename} uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
+        #print(f"Data fetched successfully and uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
+        print(f"No local file created - data uploaded directly to cloud storage.")
     else:
         print("No data available from the API.")
 else:
