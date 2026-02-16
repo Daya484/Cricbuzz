@@ -78,7 +78,7 @@ if response.status_code == 200:
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
         
-        print(f"Data fetched successfully and uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
+        #print(f"Data fetched successfully and uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
        # print(f"No local file created - data uploaded directly to cloud storage.")
     else:
         print("No player data available from the API.")

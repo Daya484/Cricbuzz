@@ -100,9 +100,9 @@ if response_list.status_code == 200:
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
         
-        print(f"\nSuccessfully extracted {len(all_gallery_details)} photo records from {len(gallery_ids)} galleries")
-        print(f"Data uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
-        print(f"No local file created - data uploaded directly to cloud storage.")
+        # print(f"\nSuccessfully extracted {len(all_gallery_details)} photo records from {len(gallery_ids)} galleries")
+        # print(f"Data uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
+        # print(f"No local file created - data uploaded directly to cloud storage.")
     else:
         print("No gallery detail data available from the API.")
 else:
