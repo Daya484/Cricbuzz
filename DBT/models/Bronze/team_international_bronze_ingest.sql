@@ -4,4 +4,4 @@
     )
 }}
 
-SELECT * from {{ ref('stg_bronze_team') }}
+SELECT * from {{ ref('stg_bronze_team_international') }}
