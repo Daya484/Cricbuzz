@@ -1,5 +1,5 @@
 # Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
+# and underscores. A good package name should reflect your organization'ss
 # name or the intended use of these models
 name: 'cricbuzz_dbt_project'
 version: '1.0.0'
@@ -14,7 +14,7 @@ model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]
-macro-paths: ["macros"]
+macro-paths: ["macros","models/Silver/delete_dupicates"]
 snapshot-paths: ["snapshots"]
 
 clean-targets:         # directories to be removed by `dbt clean`

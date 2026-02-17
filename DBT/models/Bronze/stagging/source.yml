@@ -5,9 +5,56 @@ sources:
     database: project-75b24ad0-af2b-4b2b-863
     schema: dayasagar
     tables:
-      - name: team_ext
-        description: This table is to get team data 
-      - name: team_international_silver_distinct_ingest
-        description: This table is to get team data
       - name: dim_market
         description: This table is to market_details
+
+
+
+      - name: team_ext
+        description: This table is to get team internationl data 
+      - name: team_international_silver_distinct_ingest
+        description: This table is to get silver_distinct_ingest data
+        
+      - name: team_players_ext
+        description: This table is to get team players data
+      - name: team_players_silver_distinct_ingest
+        description: This table is to get team_player_silver_distinct_ingest data
+
+      - name: team_results_ext
+        description: This table is to get team results data
+      - name: team_results_silver_distinct_ingest
+        description: This table is to get team_results_silver_distinct_ingest data
+
+
+
+      - name: photo_galary_ext
+        description: This table is to get photo galary data
+      - name: photo_galary_silver_distinct_ingest
+        description: This table is to get photo_galary_silver_distinct_ingest data
+
+      - name: photo_ext
+        description: This table is to get photo  data
+      - name: photo_silver_distinct_ingest
+        description: This table is to get photo_silver_distinct_ingest data
+
+
+
+      - name: icc_ranking_allrounder_ext
+        description: This table is to get icc ranking allrounder data
+      - name: ranking_allrounders_silver_distinct_ingest
+        description: This table is to get icc_ranking_allrounder_silver_distinct_ingest data
+
+      - name: icc_ranking_batsmen_ext
+        description: This table is to get icc ranking batsmen data
+      - name: ranking_batsmens_silver_distinct_ingest
+        description: This table is to get icc_ranking_batsmen_silver_distinct_ingest data
+
+      - name: icc_ranking_bowlers_ext
+        description: This table is to get icc ranking bowlers data
+      - name: ranking_bowlers_silver_distinct_ingest
+        description: This table is to geticc_ranking_bowlers_silver_distinct_ingest data
+
+      - name: icc_ranking_teams_ext
+        description: This table is to get icc ranking teams data
+      - name: ranking_teams_silver_distinct_ingest
+        description: This table is to get icc_ranking_teams_silver_distinct_ingest data
