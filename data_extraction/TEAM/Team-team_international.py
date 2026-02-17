@@ -6,44 +6,48 @@ from io import StringIO
 
 url = "https://cricbuzz-cricket2.p.rapidapi.com/teams/v1/international"
 
+querystring = {"formatType": "TeamInternational"}
+
 headers = {
-	"x-rapidapi-key": "90afb8345bmsh4d4300b9e2bd9ddp114c1ajsnda1a354a12a4",
-	"x-rapidapi-host": "cricbuzz-cricket2.p.rapidapi.com"
+    "x-rapidapi-key": "90afb8345bmsh4d4300b9e2bd9ddp114c1ajsnda1a354a12a4",
+    "x-rapidapi-host": "cricbuzz-cricket2.p.rapidapi.com"
 }
 
-response = requests.get(url, headers=headers)
-
-#print(response.json())
-
-params = {
-    'formatType': 'TeamInternational'
-}
-
-response = requests.get(url, headers=headers, params=params)
+response = requests.get(url, headers=headers, params=querystring)
 
 if response.status_code == 200:
-    data = response.json().get('list', [])  # Extracting the 'list' data
-    timestamp = datetime.datetime.now().strftime("%Y%m%d")
-    csv_filename = f'team_international_{timestamp}.csv'
-
-    if data:
-        #field_names = ['teamId', 'countryName', 'teamSName', 'imageId', 'teamName']  # Specify requ
-        # Collect all unique keys from all entries to ensure we have all columns
-        field_names = set()
-        for entry in data:
-            if isinstance(entry, dict):
-                 field_names.update(entry.keys())
+    data = response.json()
+    
+    # Extract team data
+    all_teams = []
+    
+    if 'list' in data:
+        teams = data['list']
         
-        field_names = list(field_names) # Convert to list for DictWriter
-
+        for team in teams:
+            # Flatten the team data
+            flattened_team = {
+                'teamId': team.get('teamId'),
+                'imageId': team.get('imageId'),
+                'countryName': team.get('countryName'),
+                'teamSName': team.get('teamSName'),
+                'teamName': team.get('teamName')
+            }
+            
+            all_teams.append(flattened_team)
+    
+    if all_teams:
+        # Generate timestamped filename
+        timestamp = datetime.datetime.now().strftime("%Y%m%d")
+        csv_filename = f'team_international_{timestamp}.csv'
+        
         # Create CSV in memory using StringIO
+        field_names = all_teams[0].keys()
         csv_buffer = StringIO()
         writer = csv.DictWriter(csv_buffer, fieldnames=field_names)
         writer.writeheader()
-        for entry in data:
-            if isinstance(entry, dict) and 'teamId' in entry: # Keep the filter for valid teams if desired, or just all dicts
-                 writer.writerow({field: entry.get(field) for field in field_names})
-
+        writer.writerows(all_teams)
+        
         # Upload directly to GCS without saving locally
         bucket_name = 'testing-daya'
         storage_client = storage.Client()
@@ -53,9 +57,9 @@ if response.status_code == 200:
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_string(csv_buffer.getvalue(), content_type='text/csv')
 
-        #print(f"Data fetched successfully and uploaded directly to GCS bucket {bucket_name} as {destination_blob_name}")
-        #print(f"No local file created - data uploaded directly to cloud storage.")
+        # print(f"Successfully extracted {len(all_teams)} international teams and uploaded to GCS bucket {bucket_name} as {destination_blob_name}")
+        # print(f"No local file created - data uploaded directly to cloud storage.")
     else:
-        print("No data available from the API.")
+        print("No team data found in the response")
 else:
-    print("Failed to fetch data:", response.status_code)
+    print(f"Failed to fetch data. Status code: {response.status_code}")

@@ -31,3 +31,4 @@ left join {{ ref('dim_gold_market') }} as m
 on lower(s.market_code2)=lower(m.alpha2)
 or lower(s.market_code3)=lower(m.alpha3)
 or lower(s.country_name)=lower(m.country)
+QUALIFY ROW_NUMBER() OVER (PARTITION BY team_id, country_name ORDER BY update_timestamp DESC) = 1
