@@ -13,7 +13,7 @@ group by 1,2,3,4,5,6
 ),
 silver as (
   select *
-  from {{ source('src_team_ext','team_player_silver_distinct_ingest') }}
+  from {{ source('src_team_ext','team_players_silver_distinct_ingest') }}
 ),
 deduplication as (
   select b.*

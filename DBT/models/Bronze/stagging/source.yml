@@ -15,7 +15,7 @@ sources:
         
       - name: team_players_ext
         description: This table is to get team players data
-      - name: team_player_silver_distinct_ingest
+      - name: team_players_silver_distinct_ingest
         description: This table is to get team_player_silver_distinct_ingest data
 
       - name: team_results_ext
