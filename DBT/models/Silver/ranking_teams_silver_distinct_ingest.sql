@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='incremental',
+        pre_hook=['{{del_data_ranking_teams()}}']
     )
 }}
 
