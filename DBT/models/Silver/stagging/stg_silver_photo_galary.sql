@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
---with bronze as (
+with bronze as (
 select 
 caption,
 gallery_intro,	
@@ -14,17 +14,17 @@ file_name,
 max(update_timestamp) as update_timestamp
 from {{ ref('photo_galary_bronze_ingest') }}
 group by 1,2,3,4,5,6,7,8,9
--- ),
--- silver as (
---   select *
---   from {{ source('src_team_ext','team_international_silver_distinct_ingest') }}
--- ),
--- deduplication as (
---   select b.*
---   from bronze b
---   left join silver s
---     on b.file_name = s.file_name
---   where s.file_name is null
---      or b.update_timestamp > s.update_timestamp
--- )
--- select * from deduplication 
+),
+silver as (
+  select *
+  from {{ source('src_team_ext','photo_galary_silver_distinct_ingest') }}
+),
+deduplication as (
+  select b.*
+  from bronze b
+  left join silver s
+    on b.file_name = s.file_name
+  where s.file_name is null
+     or b.update_timestamp > s.update_timestamp
+)
+select * from deduplication 

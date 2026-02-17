@@ -24,10 +24,17 @@ sources:
         description: This table is to get team_results_silver_distinct_ingest data
 
 
+
       - name: photo_galary_ext
         description: This table is to get photo galary data
+      - name: photo_galary_silver_distinct_ingest
+        description: This table is to get photo_galary_silver_distinct_ingest data
+
       - name: photo_ext
         description: This table is to get photo  data
+      - name: photo_silver_distinct_ingest
+        description: This table is to get photo_silver_distinct_ingest data
+
 
 
       - name: icc_ranking_allrounder_ext
