@@ -5,9 +5,9 @@ select
   gallery_published_time,
   imageId,   
   file_name,
-  max(update_timestamp) as update_timestamp
+  update_timestamp
   from {{ ref('photo_bronze_ingest') }}
-  group by 1,2,3,4,5
+  QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
   select *

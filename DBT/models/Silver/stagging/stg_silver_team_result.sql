@@ -22,9 +22,9 @@ safe_cast(team2_runs as numeric) as team2_runs,
 safe_cast(team2_wickets as numeric) as team2_wicket ,
 safe_cast(team2_overs as numeric) as team2_overs,
 file_name,
-max(update_timestamp) as update_timestamp
+update_timestamp
 from {{ ref('team_result_bronze_ingest') }}
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
+QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
   select *

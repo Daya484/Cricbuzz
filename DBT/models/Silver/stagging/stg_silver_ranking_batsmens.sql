@@ -14,9 +14,9 @@ trend,
 lastUpdatedOn as last_updated_on,
 safe_cast(faceImageId as numeric) as face_image_id,
 file_name,
-max(update_timestamp) as update_timestamp
+update_timestamp
 from {{ ref('ranking_batsmens_bronze_ingest') }}
-group by 1,2,3,4,5,6,7,8,9,10,11,12
+QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
   select *

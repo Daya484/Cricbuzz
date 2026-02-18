@@ -7,9 +7,9 @@ safe_cast(id as numeric) as id,
 bowlingStyle  as bowling_style,
 safe_cast(imageId as numeric) as image_id,      
 file_name,
-max(update_timestamp) as update_timestamp
+update_timestamp
 from {{ ref('team_players_bronze_ingest') }}
-group by 1,2,3,4,5,6
+QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
   select *
