@@ -12,23 +12,10 @@
 -- --       SELECT AS STRUCT r.*
 -- --       from {{ ref('stg_gold_team_results')}} as r
 -- --     ) AS team_results_rows
--- -- ),
--- -- team_rows as(
--- -- SELECT i.*
--- -- FROM cte,
--- -- UNNEST(cte.team_rows) AS i
--- -- ),
--- -- player_rows as(
--- -- SELECT i.*
--- -- FROM cte,
--- -- UNNEST(cte.player_rows) AS i
--- -- ),
--- -- team_results_rows as(
--- -- SELECT r.*
--- -- FROM cte,
--- -- UNNEST(cte.team_results_rows) AS r
 -- -- )
--- -- select * from team_results_rows
+-- -- SELECT i.*
+-- -- FROM cte,
+-- -- UNNEST(cte.team_rows)
 
 
 WITH cte AS (
