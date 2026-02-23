@@ -2,8 +2,8 @@ with bronze as (
 select 
   safe_cast(caption as numeric) as caption,
   gallery_intro,
-  gallery_published_time,
-  imageId,   
+  imageId as gallery_published_time,
+  gallery_published_time as imageId,   
   file_name,
   update_timestamp
   from {{ ref('photo_bronze_ingest') }}

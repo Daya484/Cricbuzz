@@ -139,93 +139,68 @@ market_code2,
 market_code3) AS GEOGRAPHY,
 
 STRUCT(
-safe_cast(country_id as numeric) as country_id,
-safe_cast(id as numeric) as id,
-name,
-country,
-safe_cast(rank as numeric) as rank,
-safe_cast(rating as numeric) as rating,
-safe_cast(points as numeric) as points,
-safe_cast(difference as numeric) as difference,
-trend,
-last_updated_on,
-safe_cast(face_image_id as numeric) as face_image_id,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp) AS ICCRANKING_ALLROUNDER,
+name as player_name,
+safe_cast(id as numeric) as player_id,
+country as player_country_name,
+safe_cast(rank as numeric) as player_rank,
+safe_cast(rating as numeric) as player_rating,
+safe_cast(points as numeric) as player_points,
+safe_cast(face_image_id as numeric) as player_face_image_id,
+last_updated_on
+) AS ICCRANKING_ALLROUNDER,
 
 STRUCT(
-safe_cast(rank as numeric) as rank,
-safe_cast(id as numeric) as id,
-name,
-country,
-safe_cast(country_id as numeric) as country_id,
-safe_cast(rating as numeric) as rating,
-safe_cast(points as numeric) as points,
-safe_cast(difference as numeric) as difference,
-trend,
-last_updated_on,
-safe_cast(face_image_id as numeric) as face_image_id,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp) AS ICCRANKING_BATSMENS,
+name as batsmen_name,
+safe_cast(id as numeric) as batsmen_id,
+country as batsmen_country_name,
+safe_cast(rank as numeric) as batsmen_rank,
+safe_cast(rating as numeric) as batsmen_rating,
+safe_cast(points as numeric) as batsmen_points,
+safe_cast(face_image_id as numeric) as batsmen_face_image_id,
+last_updated_on
+) AS ICCRANKING_BATSMENS,
 
 STRUCT(
-safe_cast(rank as numeric) as rank,
-safe_cast(id as numeric) as id,
-name,
-country,
-safe_cast(country_id as numeric) as country_id,
-safe_cast(rating as numeric) as rating,
-safe_cast(points as numeric) as points,
-safe_cast(difference as numeric) as difference,
-trend,
-last_updated_on,
-safe_cast(face_image_id as numeric) as face_image_id,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp) AS ICCRANKING_BOWLERS,
+name as bowler_name,
+safe_cast(id as numeric) as bowler_id,
+country as bowler_country_name,
+safe_cast(rank as numeric) as bowler_rank,
+safe_cast(rating as numeric) as bowler_rating,
+safe_cast(points as numeric) as bowler_points,
+safe_cast(face_image_id as numeric) as bowler_face_image_id,
+last_updated_on
+) AS ICCRANKING_BOWLERS,
 
 STRUCT (
-safe_cast(rank as numeric) as rank,
-name,
-safe_cast(rating as numeric) as rating,
-safe_cast(points as numeric) as points,
-safe_cast(difference as numeric) as difference,
-trend,
-last_updated_on,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+name as team_name,
+safe_cast(rank as numeric) as team_rank,
+safe_cast(rating as numeric) as team_rating,
+safe_cast(points as numeric) as team_points,
+last_updated_on
 ) AS ICCRANKING_TEAMS,
 
 STRUCT(
-  market_code,
-  safe_cast(team_id as numeric) as team_id,
-  country_name,
-  safe_cast(image_id as numeric) as image_id,
-  file_name,
-  CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+country_name,
+safe_cast(team_id as numeric) as team_id,
+safe_cast(image_id as numeric) as image_id
 ) AS INTERNATIONAL_TEAM,
 
 STRUCT(
-name,
-  batting_style,
-  safe_cast(id as numeric) as id,           
-  bowling_style,
-  safe_cast(image_id as numeric) as image_id,      
-  file_name,
-  CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+name as player_name,
+safe_cast(id as numeric) as player_id,  
+batting_style,
+bowling_style,
+safe_cast(image_id as numeric) as image_id
 ) AS INTERNATIONAL_TEAM_PLAYERS,
 
 STRUCT(
-name,
 series_name,
 safe_cast(match_id as numeric) as match_id,
 match_desc,
 match_format,
 match_status,
-state,
 team1_name,
-team1_short ,
 team2_name,
-team2_short,
 venue_ground,
 venue_city,
 start_date,
@@ -235,79 +210,115 @@ safe_cast(team1_wickets as numeric) as team1_wickets,
 safe_cast(team1_overs as numeric) as team1_overs,
 safe_cast(team2_runs as numeric) as team2_runs,
 safe_cast(team2_wicket as numeric) as team2_wicket,
-safe_cast(team2_overs as numeric) as team2_overs,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+safe_cast(team2_overs as numeric) as team2_overs
 ) AS INTERNATIONAL_TEAM_RESULTS,
 
 STRUCT(
-  safe_cast(caption as numeric) as caption,
-  gallery_intro,
-  gallery_published_time,
-  imageId,   
-  file_name,
-  CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+caption,
+safe_cast(imageId as numeric) as image_id,
+gallery_intro,
+gallery_published_time
 ) AS PHOTOS,
 
 STRUCT (
 caption,
 gallery_intro,	
-safe_cast(image_id as numeric) as image_id,
 gallery_published_time,
 imageHash,
 safe_cast(gallery_id as numeric) as gallery_id,
 gallery_state,
-gallery_headline,
-file_name,
-CAST(update_timestamp AS TIMESTAMP) as update_timestamp
+gallery_headline
 ) AS PHOTO_GALARY,
+
+STRUCT (
+case 
+    when source_table = 'stg_gold_team_international' then file_name 
+    else null
+end as team_international_file_name,
+
+case 
+    when source_table = 'sstg_gold_team_players' then file_name 
+    else null
+end as team_players_file_name,
+
+case 
+    when source_table = 'stg_gold_team_results' then file_name 
+    else null
+end as team_results_file_name,
+
+case 
+    when source_table = 'stg_gold_photos' then file_name 
+    else null
+end as photos_file_name,
+
+case 
+    when source_table = 'stg_gold_photos_galary' then file_name 
+    else null
+end as photos_galary_file_name,
+
+case 
+    when source_table = 'stg_gold_ranking_allrounders' then file_name 
+    else null
+end as ranking_allrounders_file_name,
+
+case 
+    when source_table = 'stg_gold_ranking_batsmens' then file_name 
+    else null
+end as ranking_batsmens_file_name,
+
+case 
+    when source_table = 'stg_gold_ranking_bowlers' then file_name 
+    else null
+end as ranking_bowlers_file_name,
+case 
+    when source_table = 'stg_gold_ranking_teams' then file_name 
+    else null
+end as ranking_teams_file_name,
+
+case 
+    when source_table = 'stg_gold_team_international' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as team_international_update_timestamp,
+
+case 
+    when source_table = 'sstg_gold_team_players' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as team_players_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_team_results' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as team_results_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_photos' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as photos_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_photos_galary' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as photos_galary_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_ranking_allrounders' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as ranking_allrounders_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_ranking_batsmens' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as ranking_batsmens_update_timestamp,
+
+case 
+    when source_table = 'stg_gold_ranking_bowlers' then CAST(update_timestamp AS TIMESTAMP)
+    else null
+end as ranking_bowlers_update_timestamp,
+case 
+    when source_table = 'stg_gold_ranking_teams' then CAST(update_timestamp AS TIMESTAMP) 
+    else null
+end as ranking_teamsupdate_timestamp
+) AS METADATA,
+
 source_table
-
-
-    -- CAST(team_id AS STRING) AS team_id, 
-    -- CAST(image_id AS STRING) AS image_id,
-    -- caption, 
-    -- gallery_intro, 
-    -- gallery_published_time, 
-    -- imageid, 
-    -- imagehash, 
-    -- gallery_id, 
-    -- gallery_state, 
-    -- gallery_headline, 
-    -- rank, 
-    -- id, 
-    -- name, 
-    -- country, 
-    -- country_id, 
-    -- rating, 
-    -- points, 
-    -- difference, 
-    -- trend, 
-    -- last_updated_on, 
-    -- face_image_id, 
-    -- batting_style, 
-    -- bowling_style, 
-    -- series_name, 
-    -- match_id, 
-    -- match_desc, 
-    -- match_format, 
-    -- match_status, 
-    -- state, 
-    -- team1_name, 
-    -- team1_short, 
-    -- team2_name, 
-    -- team2_short, 
-    -- venue_ground, 
-    -- venue_city, 
-    -- start_date, 
-    -- end_date, 
-    -- team1_runs, 
-    -- team1_wickets, 
-    -- team1_overs, 
-    -- team2_runs, 
-    -- team2_wicket, 
-    -- team2_overs,
-    -- 'stg_gold_team_international' AS source_table,
-    -- CAST(file_name AS STRING) AS file_name, 
-    -- CAST(update_timestamp AS STRING) AS update_timestamp,  
-  FROM final_results 
+FROM final_results 
