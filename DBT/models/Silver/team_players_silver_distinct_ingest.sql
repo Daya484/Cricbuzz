@@ -1,5 +1,5 @@
 {{
-    config(
+    config( 
         materialized='incremental',
         pre_hook=['{{del_data_team_players()}}']
     )

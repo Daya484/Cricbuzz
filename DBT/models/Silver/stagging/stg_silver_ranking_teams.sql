@@ -10,9 +10,9 @@ safe_cast(difference as numeric) as difference,
 trend,
 lastUpdatedOn as last_updated_on,
 file_name,
-max(update_timestamp) as update_timestamp
+update_timestamp
 from {{ ref('ranking_teams_bronze_ingest') }}
-group by 1,2,3,4,5,6,7,8
+QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
   select *

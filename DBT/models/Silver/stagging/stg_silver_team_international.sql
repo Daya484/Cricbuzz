@@ -7,12 +7,12 @@ select
   coalesce(countryName, teamName, '-1') as country_name,
   safe_cast(imageid as numeric) as image_id,
   file_name,
-  max(update_timestamp) as update_timestamp
+  update_timestamp
   from {{ ref('team_international_bronze_ingest') }}
-  group by 1,2,3,4,5
+  QUALIFY rank() OVER (PARTITION BY file_name ORDER BY update_timestamp DESC) = 1
 ),
 silver as (
-  select *
+  select file_name,update_timestamp
   from {{ source('src_team_ext','team_international_silver_distinct_ingest') }}
 ),
 deduplication as (

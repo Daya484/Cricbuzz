@@ -15,6 +15,7 @@ image_id,
 file_name,	
 update_timestamp
 from {{ ref('team_international_silver_distinct_ingest') }}
+where team_id is not null
 )
 
 select 
