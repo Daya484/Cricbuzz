@@ -1,0 +1,45 @@
+{
+    "api": {
+        "key": "90afb8345bmsh4d4300b9e2bd9ddp114c1ajsnda1a354a12a4",
+        "host_v1": "cricbuzz-cricket.p.rapidapi.com",
+        "host_v2": "cricbuzz-cricket2.p.rapidapi.com",
+        "base_url_v1": "https://cricbuzz-cricket.p.rapidapi.com",
+        "base_url_v2": "https://cricbuzz-cricket2.p.rapidapi.com"
+    },
+    "endpoints": {
+        "icc_rankings_allrounders": "/stats/v1/rankings/allrounders",
+        "icc_rankings_batsmen": "/stats/v1/rankings/batsmen",
+        "icc_rankings_bowlers": "/stats/v1/rankings/bowlers",
+        "icc_rankings_teams": "/stats/v1/rankings/teams",
+        "photo_gallery_index": "/photos/v1/index",
+        "photo_gallery_detail": "/photos/v1/detail/{gallery_id}",
+        "team_international": "/teams/v1/international",
+        "team_players": "/teams/v1/2/players",
+        "team_results": "/teams/v1/2/results"
+    },
+    "gcs_buckets": {
+        "icc_ranking_allrounders": "icc-rank_allrounder",
+        "icc_ranking_batsmen": "icc-rank_batsmen",
+        "icc_ranking_bowlers": "icc_rank_bolwer",
+        "icc_ranking_teams": "icc-rank_teams",
+        "photo_gallery": "photo-photo_galary",
+        "photo_photos": "photo-photos",
+        "team_international": "testing-daya",
+        "team_players": "team-team_players",
+        "team_results": "team-team_result"
+    },
+    "archive": {
+        "dest_bucket": "archive-daya",
+        "source_buckets": [
+            "testing-daya",
+            "team-team_result",
+            "team-team_players",
+            "photo-photos",
+            "photo-photo_galary",
+            "icc_rank_bolwer",
+            "icc-rank_teams",
+            "icc-rank_batsmen",
+            "icc-rank_allrounder"
+        ]
+    }
+}

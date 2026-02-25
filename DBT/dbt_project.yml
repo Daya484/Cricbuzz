@@ -5,7 +5,7 @@ name: 'cricbuzz_dbt_project'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'daya'
+profile: 'cricbuzz'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -30,6 +30,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   cricbuzz_dbt_project:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    Bronze:
+      +materialized: incremental
+    Silver:
+      +materialized: incremental
+    Gold:
+      +materialized: table
