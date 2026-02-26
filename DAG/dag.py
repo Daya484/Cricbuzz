@@ -180,7 +180,7 @@ with DAG(
             f"dbt run"
             f" --project-dir {DBT_PROJECT}"
             f" --profiles-dir {DBT_PROFILES}"
-            f" dbt run --select +models/Gold/final_v2.sql+"
+            f" --select +models/Gold/final_v2.sql+"
         ),
         trigger_rule=TriggerRule.ALL_SUCCESS,
     )
