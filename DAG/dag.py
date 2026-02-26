@@ -9,7 +9,7 @@ from airflow.utils.trigger_rule import TriggerRule
 from airflow.utils.state import State
 
 # ─── Git Repo Config ──────────────────────────────────────────────────────────
-GIT_REPO_URL  = "https://github.com/YOUR_USERNAME/YOUR_REPO.git"  # ← your repo URL
+GIT_REPO_URL  = "https://github.com/Daya484/Cricbuzz.git"  # ← your repo URL
 GIT_BRANCH    = "main"                                             # ← your branch
 CLONE_DIR     = "/tmp/cricbuzz"                                    # cloned to worker's /tmp
 
