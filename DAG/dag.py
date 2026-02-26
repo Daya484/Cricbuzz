@@ -51,7 +51,7 @@ default_args = {
 
 # ─── Callable: write profiles.yml from config ─────────────────────────────────
 def write_dbt_profiles():
-    profiles_content = f"""cricbuzz:
+    profiles_content = f"""daya:
   target: dev
   outputs:
     dev:
@@ -180,7 +180,7 @@ with DAG(
             f"dbt run"
             f" --project-dir {DBT_PROJECT}"
             f" --profiles-dir {DBT_PROFILES}"
-            f" --select +final+"
+            f" --select +models/Gold/final_v2.sql+"
         ),
         trigger_rule=TriggerRule.ALL_SUCCESS,
     )
