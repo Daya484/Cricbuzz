@@ -10,8 +10,8 @@ from airflow.utils.state import State
 
 # ─── Git Repo Config ──────────────────────────────────────────────────────────
 GIT_REPO_URL  = "https://github.com/Daya484/Cricbuzz.git"  # ← your repo URL
-GIT_BRANCH    = "main"                                             # ← your branch
-CLONE_DIR     = "/tmp/cricbuzz"                                    # cloned to worker's /tmp
+GIT_BRANCH    = "main"                                      # ← your branch
+CLONE_DIR     = "/home/airflow/gcs/data/cricbuzz_repo"      # persistent GCS-backed path
 
 # ─── Derived paths (all come from the cloned repo) ────────────────────────────
 EXTRACT_SCRIPT = f"{CLONE_DIR}/data_extraction/data_extraction.py"
@@ -86,26 +86,32 @@ def check_extraction_results(**context):
 with DAG(
     dag_id="cricbuzz_pipeline",
     default_args=default_args,
-    description="Git clone → Extract → DBT → Archive → Email",
+    description="Git pull → Extract → DBT → Archive → Email",
     schedule_interval="30 3 1 * *",   # 1st of every month at 09:00 AM IST (03:30 UTC)
     catchup=False,
 ) as dag:
 
-    # ── Step 1: Clone / pull latest code from Git ──────────────────────────────
-    # If the repo already exists on this worker, just pull latest; else clone.
+    # ── Step 1: Clone or pull latest code from GitHub ─────────────────────────
+    # Deletes old clone and does a fresh clone every run to guarantee latest code.
+    # Uses pip-installed gitpython as fallback if system git is unavailable.
     git_clone = BashOperator(
         task_id="git_clone_repo",
         bash_command=(
-            f"if [ -d {CLONE_DIR}/.git ]; then "
-            f"  git -C {CLONE_DIR} pull origin {GIT_BRANCH}; "
-            f"else "
-            f"  git clone --branch {GIT_BRANCH} {GIT_REPO_URL} {CLONE_DIR}; "
-            f"fi "
-            f"&& echo '✅ Repo ready at {CLONE_DIR}'"
+            f"echo '🔄 Fetching latest code from GitHub...' && "
+            f"rm -rf {CLONE_DIR} && "
+            f"pip install gitpython --quiet && "
+            f"python -c \""
+            f"import git; "
+            f"git.Repo.clone_from("
+            f"'{GIT_REPO_URL}', "
+            f"'{CLONE_DIR}', "
+            f"branch='{GIT_BRANCH}'"
+            f"); "
+            f"print('✅ Repo cloned successfully to {CLONE_DIR}')\" "
         ),
     )
 
-    # ── Step 2a: Install dbt-core + dbt-bigquery ───────────────────────────────
+    # ── Step 2a: Install dbt-core + dbt-bigquery ─────────────────────────────
     setup_dbt = BashOperator(
         task_id="setup_dbt",
         bash_command=(
@@ -114,22 +120,22 @@ with DAG(
         ),
     )
 
-    # ── Step 2b: Install Python dependencies from repo ────────────────────────
+    # ── Step 2b: Install Python dependencies ─────────────────────────────────
     install_deps = BashOperator(
         task_id="install_python_deps",
         bash_command=(
-            f"pip install requests google-cloud-storage --quiet "
-            f"&& echo '✅ Python deps installed'"
+            "pip install requests google-cloud-storage --quiet "
+            "&& echo '✅ Python deps installed'"
         ),
     )
 
-    # ── Step 2c: Write profiles.yml ───────────────────────────────────────────
+    # ── Step 2c: Write profiles.yml ──────────────────────────────────────────
     create_dbt_profiles = PythonOperator(
         task_id="create_dbt_profiles",
         python_callable=write_dbt_profiles,
     )
 
-    # ── Step 3: 9 Parallel extraction tasks (all use cloned script) ───────────
+    # ── Step 3: 9 Parallel extraction tasks (all use cloned script) ──────────
     extract_icc_allrounders = BashOperator(
         task_id="extract_icc_allrounders",
         bash_command=f"python {EXTRACT_SCRIPT} extract_icc_rankings_allrounders",
@@ -173,7 +179,7 @@ with DAG(
         extract_team_international, extract_team_players, extract_team_results,
     ]
 
-    # ── Step 4: dbt run ────────────────────────────────────────────────────────
+    # ── Step 4: dbt run ──────────────────────────────────────────────────────
     run_dbt = BashOperator(
         task_id="run_dbt",
         bash_command=(
@@ -185,14 +191,14 @@ with DAG(
         trigger_rule=TriggerRule.ALL_SUCCESS,
     )
 
-    # ── Step 5: Archive ────────────────────────────────────────────────────────
+    # ── Step 5: Archive ──────────────────────────────────────────────────────
     archive = BashOperator(
         task_id="archive_to_gcs",
         bash_command=f"python {EXTRACT_SCRIPT} archive_to_gcs",
         trigger_rule=TriggerRule.ALL_SUCCESS,
     )
 
-    # ── Step 6: Check results (always runs) ───────────────────────────────────
+    # ── Step 6: Check results (always runs) ──────────────────────────────────
     check_results = BranchPythonOperator(
         task_id="check_extraction_results",
         python_callable=check_extraction_results,
@@ -200,7 +206,7 @@ with DAG(
         provide_context=True,
     )
 
-    # ── Step 7a: Success email ─────────────────────────────────────────────────
+    # ── Step 7a: Success email ───────────────────────────────────────────────
     email_success = EmailOperator(
         task_id="email_success",
         to=NOTIFY_EMAIL,
@@ -209,7 +215,7 @@ with DAG(
         <h3>✅ Cricbuzz Daily Pipeline — Success</h3>
         <p>All tasks completed successfully.</p>
         <ul>
-            <li>Git clone: <b>DONE</b></li>
+            <li>Git pull: <b>DONE</b></li>
             <li>All 9 extraction tasks: <b>PASSED</b></li>
             <li>DBT run (<code>dbt run --select +final+</code>): <b>PASSED</b></li>
             <li>Archive to GCS: <b>PASSED</b></li>
@@ -218,7 +224,7 @@ with DAG(
         """,
     )
 
-    # ── Step 7b: Failure email ─────────────────────────────────────────────────
+    # ── Step 7b: Failure email ───────────────────────────────────────────────
     email_failure = EmailOperator(
         task_id="email_failure",
         to=NOTIFY_EMAIL,
@@ -232,9 +238,9 @@ with DAG(
         trigger_rule=TriggerRule.ALL_DONE,
     )
 
-    # ── Task Dependency Graph ──────────────────────────────────────────────────
+    # ── Task Dependency Graph ─────────────────────────────────────────────────
     #
-    #            git_clone_repo
+    #            git_clone_repo  (always pulls latest from GitHub)
     #           /       |       \
     #      setup_dbt  install   create_dbt_profiles
     #           \     _deps    /       |
