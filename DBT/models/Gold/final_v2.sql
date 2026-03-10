@@ -1,3 +1,5 @@
+{{config(materialized='table')}}
+
 with final_results as(
 -- 1. TEAM INTERNATIONAL
 SELECT 
@@ -237,7 +239,7 @@ case
 end as team_international_file_name,
 
 case 
-    when source_table = 'sstg_gold_team_players' then file_name 
+    when source_table = 'stg_gold_team_players' then file_name 
     else null
 end as team_players_file_name,
 
@@ -281,7 +283,7 @@ case
 end as team_international_update_timestamp,
 
 case 
-    when source_table = 'sstg_gold_team_players' then CAST(update_timestamp AS TIMESTAMP)
+    when source_table = 'stg_gold_team_players' then CAST(update_timestamp AS TIMESTAMP)
     else null
 end as team_players_update_timestamp,
 
@@ -317,7 +319,7 @@ end as ranking_bowlers_update_timestamp,
 case 
     when source_table = 'stg_gold_ranking_teams' then CAST(update_timestamp AS TIMESTAMP) 
     else null
-end as ranking_teamsupdate_timestamp
+end as ranking_teams_update_timestamp
 ) AS METADATA,
 
 source_table
