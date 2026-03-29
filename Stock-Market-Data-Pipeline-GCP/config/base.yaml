@@ -1,0 +1,71 @@
+# ============================================================
+# Base Configuration — Shared across all environments
+# ============================================================
+# project_id, bucket, and topic differ per env (dv/qa/pd).
+# Everything else below is the same across all environments.
+# ============================================================
+
+# ---- Pub/Sub (shared settings) ----
+pubsub:
+  dead_letter_topic_suffix: "-dlq"
+
+# ---- BigQuery ----
+bigquery:
+  dataset: "stock_market_data"
+  tables:
+    # Real-time (Dataflow)
+    raw_ticks: "raw_stock_ticks"
+    aggregated: "stock_aggregated_1min"
+    # Batch (Medallion layers via Dataproc)
+    bronze: "bronze_stock_data"
+    silver: "silver_stock_data"
+    gold_indicators: "gold_technical_indicators"
+    gold_summary: "gold_daily_summary"
+
+# ---- Cloud Storage (shared prefixes) ----
+gcs:
+  raw_data_prefix: "raw/"
+  processed_data_prefix: "processed/"
+  staging_prefix: "staging/"
+  temp_prefix: "temp/"
+
+# ---- Dataflow ----
+dataflow:
+  job_name: "stock-market-stream-processor"
+  runner: "DataflowRunner"
+  max_num_workers: 3
+  machine_type: "n1-standard-2"
+  streaming: true
+
+# ---- Dataproc ----
+dataproc:
+  cluster_name: "stock-market-batch-cluster"
+  master_machine_type: "n1-standard-2"
+  worker_machine_type: "n1-standard-2"
+  num_workers: 2
+  image_version: "2.1-debian11"
+
+# ---- Cloud Run ----
+cloud_run:
+  service_name: "stock-publisher"
+  min_instances: 1
+  max_instances: 1
+  cpu: "1"
+  memory: "512Mi"
+
+# ---- Stock Market API ----
+api:
+  provider: "alpha_vantage"
+  base_url: "https://www.alphavantage.co/query"
+  polling_interval_seconds: 60
+  symbols:
+    - "AAPL"
+    - "GOOGL"
+    - "MSFT"
+    - "AMZN"
+    - "TSLA"
+
+# ---- Cloud Composer ----
+composer:
+  environment_name: "stock-pipeline-composer"
+  dag_schedule: "0 9 * * 1-5"

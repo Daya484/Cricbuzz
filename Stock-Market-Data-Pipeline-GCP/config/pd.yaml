@@ -1,0 +1,19 @@
+# ============================================================
+# PROD Environment
+# ============================================================
+
+environment: "pd"
+
+gcp:
+  project_id: "your-gcp-project-id-prod"
+  region: "us-central1"
+  zone: "us-central1-a"
+
+pubsub:
+  topic_name: "pd-stock-market-ticks"
+  subscription_name: "pd-stock-market-ticks-sub"
+
+gcs:
+  bucket_name: "pd-stock-market-pipeline-bucket"
+  temp_location: "gs://pd-stock-market-pipeline-bucket/temp/"
+  staging_location: "gs://pd-stock-market-pipeline-bucket/staging/"

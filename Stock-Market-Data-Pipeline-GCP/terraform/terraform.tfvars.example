@@ -1,0 +1,9 @@
+# Auto-generated variable values for development
+# Copy to terraform.tfvars and update with your values:
+#   cp terraform.tfvars.example terraform.tfvars
+
+project_id       = "your-gcp-project-id"
+region           = "us-central1"
+environment      = "dev"
+gcs_bucket_name  = "stock-market-data-pipeline-bucket"
+bq_dataset_id    = "stock_market_data"

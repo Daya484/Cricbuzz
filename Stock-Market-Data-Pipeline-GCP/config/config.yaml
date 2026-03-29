@@ -1,0 +1,15 @@
+# ============================================================
+# Config Loader — Environment-aware configuration
+# ============================================================
+# This file has been REPLACED by environment-specific configs.
+#
+# Config files:
+#   config/base.yaml  — Shared defaults
+#   config/dv.yaml    — Dev environment
+#   config/qa.yaml    — QA environment
+#   config/pd.yaml    — Prod environment
+#
+# Usage:
+#   Set ENV=dv|qa|pd via environment variable, or pass --env flag.
+#   The loader merges base.yaml + <env>.yaml automatically.
+# ============================================================

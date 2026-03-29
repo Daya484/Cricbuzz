@@ -1,0 +1,16 @@
+# Ignore unnecessary files in Docker build
+.git
+.gitignore
+.env
+.env.example
+__pycache__
+*.pyc
+venv/
+.venv/
+data/
+terraform/
+dags/
+docs/
+*.md
+.terraform/
+*.tfstate*

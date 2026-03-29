@@ -1,0 +1,30 @@
+# ============================================================
+# Stock Market Data Pipeline - Python Dependencies
+# ============================================================
+
+# GCP Services
+google-cloud-pubsub==2.21.1
+google-cloud-bigquery==3.19.0
+google-cloud-storage==2.14.0
+google-cloud-dataproc==5.9.0
+
+# Apache Beam (Dataflow)
+apache-beam[gcp]==2.53.0
+
+# PySpark (Dataproc batch)
+pyspark==3.5.0
+
+# Stock Market Data
+alpha-vantage==2.3.1
+requests==2.31.0
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.2
+
+# Configuration
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Logging & Monitoring
+google-cloud-logging==3.9.0

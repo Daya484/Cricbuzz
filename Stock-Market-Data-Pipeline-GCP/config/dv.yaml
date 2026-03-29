@@ -1,0 +1,19 @@
+# ============================================================
+# DEV Environment
+# ============================================================
+
+environment: "dv"
+
+gcp:
+  project_id: "your-gcp-project-id-dev"
+  region: "us-central1"
+  zone: "us-central1-a"
+
+pubsub:
+  topic_name: "dv-stock-market-ticks"
+  subscription_name: "dv-stock-market-ticks-sub"
+
+gcs:
+  bucket_name: "dv-stock-market-pipeline-bucket"
+  temp_location: "gs://dv-stock-market-pipeline-bucket/temp/"
+  staging_location: "gs://dv-stock-market-pipeline-bucket/staging/"

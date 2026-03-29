@@ -1,0 +1,19 @@
+# ============================================================
+# QA Environment
+# ============================================================
+
+environment: "qa"
+
+gcp:
+  project_id: "your-gcp-project-id-qa"
+  region: "us-central1"
+  zone: "us-central1-a"
+
+pubsub:
+  topic_name: "qa-stock-market-ticks"
+  subscription_name: "qa-stock-market-ticks-sub"
+
+gcs:
+  bucket_name: "qa-stock-market-pipeline-bucket"
+  temp_location: "gs://qa-stock-market-pipeline-bucket/temp/"
+  staging_location: "gs://qa-stock-market-pipeline-bucket/staging/"
